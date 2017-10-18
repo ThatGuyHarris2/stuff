@@ -1,0 +1,35 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12,11,5,4,3,2);
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 1);
+  lcd.print("Move The Meter");
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int sensorValue = analogRead(A1);
+
+    Serial.println(sensorValue);
+    if (sensorValue < 300){
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Thats Nice!!");
+    }
+  else if (sensorValue >= 300 && sensorValue < 600){
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Wait, Stop");
+    }
+    else if (sensorValue >= 600 && sensorValue < 900){
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("OW!!");
+    }
+    delay(50);
+}
