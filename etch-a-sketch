@@ -1,0 +1,42 @@
+var serial;
+var x = 0;
+var y = 0;
+var prevX = 0;
+var prevY = 0;
+var buttonState = 1;
+
+function setup() { 
+  createCanvas(400, 400);
+  
+  serial = new p5.SerialPort();
+	serial.open('COM3');
+  serial.on('data', parseData);
+  //serial.on('error', printError);
+} 
+
+function draw() { 
+  // background(220);
+  fill(0);
+  // ellipse(x, y, 20,20);
+  line(prevX, prevY, x, y);
+  prevX = x;
+  prevY = y;
+  
+  if( buttonState == 0){ // reset the canvas to white background
+    background(255);
+  }
+}
+
+function parseData() {
+	var data = serial.readLine();
+  
+  // console.log(data);
+  
+  if(data.length > 0) {
+    var values = data.split(',');
+    // print(values);
+    y = map(int(values[1]), 0, 1023, height, 0); // line will move across y axis with potentiometer 2
+  	x = map(int(values[0]), 0, 1023, 0, width); // line will move across x axis with potentiometer 1
+    buttonState = int(values[2]); // button to reset canvas
+  }
+}
